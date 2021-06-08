@@ -1,0 +1,99 @@
+﻿@using Webforum.Areas.Identity.Data.Entites
+@inject Webforum.Gateways.DBGateway _DBGateway
+@code {
+    int amountofPostsinHeadline = 0;
+    List<PostThread> Threads = new List<PostThread>();
+    List<Posts> posts = new List<Posts>();
+    Posts latestPost = new Posts();
+}
+
+
+
+<h3>Boardoverview</h3>
+
+@foreach (var subject in _DBGateway.CollectForumOverview())
+{
+
+    <h2 class="h5">@subject.SubjectName</h2>
+    <table class="table table-striped table-bordered">
+        <thead class="thead-light">
+            <tr>
+                <th class="forum-col" scope="col">@subject.SubjectName</th>
+                <th scope="col">Ämnen</th>
+                <th scope="col">Trådar</th>
+                <th class="last-post-col" scope="col">Senaste inlägget</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var topic in subject.Categories)
+            {
+                Threads = topic.HeadLines.SelectMany(x => x.Threads).ToList();
+                posts = Threads.SelectMany(x => x.Posts).OrderByDescending(x => x.CreationDate).ToList();
+                if (posts.Count != 0)
+                {
+                    latestPost = posts.First();
+
+                }
+
+                <tr>
+                    <td>
+                        <h3 class="h5"><a href="/CategoryOverview?CategoryID=@topic.Id">@topic.Name</a></h3>
+
+                        @if (posts.Count != 0)
+                        {
+                            <p>@latestPost.Post</p>
+
+                        }
+                    </td>
+                    <td>
+                        @if (topic.HeadLines.Count != 0)
+                        {
+                            <div>@topic.HeadLines.Count</div>
+
+                        }
+                        else
+                        {
+                            <div>0</div>
+                        }
+                    </td>
+                    <td>
+
+
+                        @if (Threads.Count != 0)
+                        {
+                            <div>@Threads.Count</div>
+                        }
+                        else
+                        {
+                            <div>0</div>
+                        }
+
+
+                    </td>
+                    <td>
+                        @if (posts.Count != 0)
+                        {
+
+                            <h4 class="h6"><a href="#">@Threads.Where(x => x.Id == latestPost.PostThreadId).Select(x => x.Titel).FirstOrDefault()</a></h4>
+                            <div>Författare: <a href="#">@_DBGateway.FindUserForComponent(posts.Where(x => x.Id == latestPost.Id).Select(x => x.WebforumUserId).FirstOrDefault()).UserName</a></div>
+                            <div>@posts.Where(x => x.Id == latestPost.Id).Select(x => x.CreationDate).FirstOrDefault()</div>
+
+                        }
+                        else
+                        {
+                            <h4 class="h6"><a href="#"></a></h4>
+                            <div>Författare: <a href="#"></a></div>
+                            <div></div>
+
+                        }
+
+                    </td>
+
+
+                </tr>
+            }
+
+        </tbody>
+    </table>
+}
+

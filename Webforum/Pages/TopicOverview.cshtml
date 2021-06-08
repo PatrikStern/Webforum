@@ -1,0 +1,95 @@
+﻿@page
+@model Webforum.Pages.TopicOverviewModel
+@using Webforum.Areas.Identity.Data
+@using Webforum.Areas.Identity.Data.Entites
+@using Webforum.Gateways
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<WebforumUser> SignInManager
+@inject UserManager<WebforumUser> UserManager
+@inject DBGateway _DBGateway
+@{
+    var user = await UserManager.GetUserAsync(User);
+    List<Posts> posts = new List<Posts>();
+    List<Comments> comments = new List<Comments>();
+    Posts latestPost = new Posts();
+}
+
+
+<h2 class="h5">Trådar</h2>
+<table class="table table-striped table-bordered">
+    <thead class="thead-light">
+        <tr>
+            <th class="topic-col" scope="col">Tråd</th>
+            <th scope="col">Skapat</th>
+            <th scope="col">Statistik</th>
+            <th class="last-post-col" scope="col">Senaste inlägget</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var thread in Model.Threads)
+        {
+            posts = thread.Posts.OrderByDescending(x => x.CreationDate).ToList();
+            comments = posts.SelectMany(x => x.Comments).ToList();
+
+            if (posts.Count != 0)
+            {
+                latestPost = posts.First();
+            }
+            <tr>
+                <td>
+                    <h3 class="h6"><span class="badge badge-primary m-2">3 olästa poster</span><a href="/Posts?ThreadID=@thread.Id&Thread=@thread.Titel">@thread.Titel</a></h3>
+                </td>
+                <td>
+                    <div>Av <a href="#">@_DBGateway.FindUser(thread.WebforumUserId.ToString()).Result.UserName</a></div>
+                    <div>@thread.CreationDate</div>
+                </td>
+                <td>
+                    @if (posts.Count != 0)
+                    {
+                        <div>@posts.Count inlägg</div>
+                    }
+                    else
+                    {
+                        <div>0 inlägg</div>
+                    }
+                    @if (comments.Count != 0)
+                    {
+                        <div>@comments.Count kommentarer</div>
+                    }
+                    else
+                    {
+                        <div>0 kommentarer</div>
+                    }
+
+
+                </td>
+                <td>
+                    @if (posts.Count != 0)
+                    {
+                        <div>Författare: <a href="#">@_DBGateway.FindUser(latestPost.WebforumUserId).Result.UserName</a></div>
+                        <div>@latestPost.CreationDate.ToString()</div>
+                    }
+                    else
+                    {
+                        <div></div>
+                        <div></div>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <button class="btn-addinput btn-primary btn-sm">Ny tråd</button>
+    <form method="post" id="JStxtinput" name="headlineinput">
+        <input hidden name="userID" value="@user.Id" />
+
+
+
+
+    </form>
+}
+
+<component type="typeof(HTMLComponents.SiteStatistics)" render-mode="ServerPrerendered" />

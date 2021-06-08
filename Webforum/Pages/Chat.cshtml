@@ -1,0 +1,145 @@
+﻿@page
+@model Webforum.Pages.ChatModel
+@using Webforum.Gateways
+@using Webforum.Areas.Identity.Data.Entites
+@using Webforum.Areas.Identity.Data
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<WebforumUser> SignInManager
+@inject UserManager<WebforumUser> UserManager
+@inject DBGateway _DBGateway
+@{
+    var user = await UserManager.GetUserAsync(User);
+
+}
+
+
+<div class="chat-container">
+    <div class="search-container">
+        <input type="text" placeholder="Search" />
+    </div>
+    <div class="conversration-list">
+        @if (Model.Chat != null)
+        {
+            @foreach (var dialog in Model.Chat.Dialogs)
+            {
+        <div class="conversation active" onclick="document.forms['@dialog.Id'].submit();">
+            @if (dialog.ConversationalPartner != user.Id)
+            {
+                <img src="~/img/@_DBGateway.FindUser(dialog.ConversationalPartner).Result.ImageUrl" alt="User image" />
+                <div class="title-text">
+                    @_DBGateway.FindUser(dialog.ConversationalPartner).Result.UserName
+                </div>
+            }
+            else
+            {
+                <img src="~/img/@_DBGateway.FindUser(dialog.WebforumUserId).Result.ImageUrl" alt="User image" />
+                <div class="title-text">
+                    @_DBGateway.FindUser(dialog.WebforumUserId).Result.UserName
+                </div>
+            }
+
+            <div class="creationDate">
+                @if (dialog.Messages.Count > 0)
+                {
+                    @dialog.Messages.Where(x => x.DialogId == dialog.Id).OrderByDescending(x => x.CreationDate).Select(x => x.CreationDate).First()
+                }
+                else
+                {
+
+                }
+            </div>
+            <div class="conversation-message">
+                @if (dialog.Messages.Count > 0)
+                {
+                    @dialog.Messages.Where(x => x.DialogId == dialog.Id).OrderByDescending(x => x.CreationDate).Select(x => x.Post).First()
+
+                }
+                else
+                {
+
+                }
+            </div>
+            <form id="@dialog.Id" method="post">
+                <input hidden name="DialogID" value="@dialog.Id" />
+            </form>
+        </div>
+
+            }
+        }
+
+    </div>
+
+    <div class="new-message-container">
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <button class="btn-addinput">+</button>
+            <form method="post" id="JStxtinput" name="headlineinput">
+                <input hidden name="userID" value="@user.Id" />
+                <input hidden name="ChatID" value="@Model.Chat.Id" />
+
+
+
+            </form>
+        }
+    </div>
+
+    <div class="chat-title">
+        <span>Test</span>
+        <img src="~/img/delete_black_24dp.svg" alt="Delete conversation" />
+    </div>
+
+
+    <div class="chat-message-list m-2">
+        @if (Model.ChatMessagesList != null)
+        {
+            @foreach (var message in Model.ChatMessagesList.OrderByDescending(x => x.CreationDate))
+            {
+                @if (message.WebforumUserId == user.Id)
+                {
+                    <div class="message-row you-message">
+                        <div class="message-content">
+                            <div class="message-text">@message.Post</div>
+                            <div class="message-time">@message.CreationDate</div>
+
+                        </div>
+
+                    </div>
+                }
+                else
+                {
+                    <div class="message-row other-message">
+                        <div class="message-content">
+                            <img src="~/img/@_DBGateway.FindUser(message.WebforumUserId).Result.ImageUrl" alt="User image" />
+                            <div class="message-text">@message.Post</div>
+                            <div class="message-time">@message.CreationDate</div>
+                        </div>
+                    </div>
+                }
+
+
+            }
+
+        }
+
+    </div>
+
+    <form method="post" id="chat-submit" class="chat-form">
+        <img src="~/img/attachment_black_24dp.svg" alt="Add Attachment" />
+        
+        <input name="UserID" hidden type="submit" value="@user.Id" />
+        <input name="newChatMessage" type="text" placeholder="type a message" />
+    </form>
+
+    <script type="text/javascript">
+
+        $(function () {
+            $(window).keydown(function (e) {
+                if (e.keyCode == 13) {
+                    $("#chat-submit").submit()
+                }
+            });
+        })
+    </script>
+</div>
+
+

@@ -1,0 +1,94 @@
+﻿@page
+@model Webforum.Pages.AdminModel
+@using Webforum.Gateways
+@inject DBGateway _DBGateway 
+@{
+}
+
+
+<div class="mb-3 form-group">
+    <form class="subject" method="post">
+        <label asp-for="subject.SubjectName" class="form-label">Kategori</label>
+        <input asp-for="subject.SubjectName" type="text" class="form-control" placeholder="Lägg till kategori">
+        <button type="submit">Lägg till</button>
+    </form>
+</div>
+<br />
+<div>
+    @if (Model.subjects != null)
+    {
+
+
+        @foreach (var subject in Model.subjects)
+        {
+            <br />
+            <p style="display:inline-block">Subject: @subject.SubjectName</p>
+            @if (subject.Categories != null)
+            {
+                @foreach (var category in subject.Categories)
+                {
+                    <p>@category.Name</p>
+                }
+
+            }
+            <form class="category" method="post">
+                Lägg till ämne
+                <input name="CategoryName" />
+                <input hidden name="SubjectId" value="@subject.Id" />
+                <button type="submit">Lägg till</button>
+            </form>
+        }
+
+
+    }
+</div>
+
+<div class="container-fluid">
+    <h3>Mottagna anmälda inlägg på hemsidan</h3>
+    <table>
+        <thead class="col">
+            <tr>
+                <th>Inlägg</th>
+                <th>Skapat</th>
+                <th>Tråd</th>
+                <th>Skapat av</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var reportedPost in Model.ReportedPosts)
+            {
+                @if(reportedPost.deletedByAdmin == false)
+                {
+
+                <tr>
+                    <td>
+                        @reportedPost.Post
+                    </td>
+                    <td>
+                        @reportedPost.CreationDate
+                    </td>
+                    <td>
+                        @_DBGateway.FindThreadName(reportedPost.PostThreadId).Result
+                    </td>
+                    <td>
+                        @_DBGateway.FindUser(reportedPost.WebforumUserId).Result.UserName
+                    </td>
+                    <td>
+                        <form method="post">
+                            <input hidden name="postToDelete" value="@reportedPost.Id"/>
+                            <button class="btn-danger btn-sm" type="submit">Ta bort inlägg</button>
+                        </form>
+                    </td>
+                </tr>
+                }
+            }
+
+
+        </tbody>
+
+
+    </table>
+   
+
+
+</div>
