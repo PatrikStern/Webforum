@@ -17,6 +17,9 @@ namespace Webforum.Pages
         [BindProperty(SupportsGet = true)]
         public string Thread { get; set; }
 
+        [BindProperty(SupportsGet = true)]
+        public string HeadLineID { get; set; }
+
         [BindProperty]
         public string UserID { get; set; }
 
@@ -24,20 +27,22 @@ namespace Webforum.Pages
         public string newInput { get; set; }
         [BindProperty]
         public string reportedPost { get; set; }
-
+        public List<PostThread> Threads { get; set; }
         public List<Posts> Posts { get; set; }
 
         private readonly DBGateway _DBGateway;
+        private readonly APIGateway _APIGateway;
 
-        public PostsModel(DBGateway DBGateway)
+        public PostsModel(DBGateway DBGateway, APIGateway APIGateway)
         {
             _DBGateway = DBGateway;
+            _APIGateway = APIGateway;
         }
 
         public async Task OnGetAsync()
         {
-
-            Posts = await _DBGateway.CollectPosts(ThreadID);
+            Threads = await _DBGateway.CollectThreadTopicsOverview(HeadLineID);
+            Posts = await _APIGateway.GetPostsAPI(ThreadID);
         }
 
         public async Task<ActionResult> OnPostAsync()
@@ -46,13 +51,14 @@ namespace Webforum.Pages
             {
                 await _DBGateway.ReportPost(reportedPost);
             }
-            else
+            else if(newInput != null)
             {
 
             var post = new Posts()
             {
                 Post = newInput,
                 WebforumUserId = UserID,
+                UserName = _DBGateway.FindUser(UserID).Result.UserName,
                 PostThreadId = ThreadID
             };
 
@@ -62,7 +68,7 @@ namespace Webforum.Pages
             await _DBGateway.UpdateUser(user);
             }
 
-            return RedirectToPage("Posts", new { ThreadID = ThreadID });
+            return RedirectToPage("Posts", new { ThreadID = ThreadID, Thread = Thread, HeadLineID = HeadLineID });
         }
     }
 }

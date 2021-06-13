@@ -5,10 +5,40 @@
 @using Webforum.Gateways
 @inject SignInManager<WebforumUser> SignInManager
 @inject UserManager<WebforumUser> UserManager
-@inject DBGateway _DBGateway 
+@inject DBGateway _DBGateway
 @{
     var user = await UserManager.GetUserAsync(User);
+
 }
+
+<div>
+    <h4 class="Dropdowntitle">Byt samtals tråd</h4>
+    <div class="dropdown">
+        <button class="btn btn-secondary btn-sm dropdown-toggle m-3" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            @Model.Thread
+        </button>
+        <div onclick="" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            @if (Model.Threads.Count > 0)
+            {
+                @foreach (var thread in Model.Threads)
+                {
+
+                    if (thread.Titel != Model.Thread)
+                    {
+                        <div onclick="document.forms['@thread.Id'].submit();">
+                            <form id="@thread.Id" method="post">
+                                <input type="submit" class="dropdown-item" value="@thread.Titel" />
+                                <input name="ThreadID" hidden value="@thread.Id" />
+                                <input name="Thread" hidden value="@thread.Titel" />
+                            </form>
+                        </div>
+                    }
+                }
+
+            }
+        </div>
+    </div>
+</div>
 
 
 
@@ -36,28 +66,29 @@
             <tr>
 
                 <td class="post-col">
+                    <div><img class="post-image" src="~/img/@_DBGateway.FindUser(post.WebforumUserId).Result.ImageUrl" /></div>
                     <div><span class="font-weight-bold">Joined: </span><br />@_DBGateway.FindUser(post.WebforumUserId).Result.CreationDate</div>
                     <div><span class="font-weight-bold">Posts:</span><br />@_DBGateway.FindUser(post.WebforumUserId).Result.AmountOfPosts</div>
                 </td>
                 <td>
-                    @if(post.ReportedPost == false)
-                {
-                    @post.Post
-                    <form method="post" class="float-right">
-                        <input hidden name="reportedPost" value="@post.Id" />
-                        <button class="btn-danger btn-sm" type="submit">Anmäl inlägg</button>
-                    </form>
-                }
-                    @if(post.ReportedPost == true && post.deletedByAdmin == false)
-                {
+                    @if (post.ReportedPost == false)
+                    {
+                        @post.Post
+                        <form method="post" class="float-right">
+                            <input hidden name="reportedPost" value="@post.Id" />
+                            <button class="btn-danger btn-sm" type="submit">Anmäl inlägg</button>
+                        </form>
+                    }
+                    @if (post.ReportedPost == true && post.deletedByAdmin == false)
+                    {
 
 
-                <div class="float-right"><p style="color:orangered;">Inlägget granskas efter anmälning...</p></div>
-                }
-                @if(post.deletedByAdmin == true)
-                {
-                    <div class="float-right"><p style="color:darkred;">Inlägget är borttaget sedan det anmälts.</p></div>
-                }
+                        <div class="float-right"><p style="color:orangered;">Inlägget granskas efter anmälning...</p></div>
+                    }
+                    @if (post.deletedByAdmin == true)
+                    {
+                        <div class="float-right"><p style="color:darkred;">Inlägget är borttaget sedan det anmälts och försvinner om 30 dagar.</p></div>
+                    }
                 </td>
             </tr>
     </table>

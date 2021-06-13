@@ -17,7 +17,8 @@ namespace Webforum.Areas.Identity.Data.Entites
         public bool deletedByAdmin { get; set; }
         public DateTime CreationDate { get; set; }
         [ForeignKey("UserId")]
-        public string WebforumUserId { get; set; } 
+        public string WebforumUserId { get; set; }
+        public string UserName { get; set; }
         public string PostThreadId { get; set; }
         public virtual List<Comments> Comments { get; set; }
 

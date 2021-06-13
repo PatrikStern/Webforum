@@ -10,7 +10,7 @@ using Webforum.Data;
 namespace Webforum.Migrations
 {
     [DbContext(typeof(WebforumContext))]
-    [Migration("20210602134936_updates")]
+    [Migration("20210609134422_updates")]
     partial class updates
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -51,14 +51,14 @@ namespace Webforum.Migrations
                         new
                         {
                             Id = "root-0c0-aa65-4af8-bd17-00bd9344e575",
-                            ConcurrencyStamp = "9cf30178-75c6-4660-9961-af4bc7d25e68",
+                            ConcurrencyStamp = "fb376350-5daa-4be7-80e0-0daec36896af",
                             Name = "root",
                             NormalizedName = "ROOT"
                         },
                         new
                         {
                             Id = "user-2c0-aa65-4af8-bd17-00bd9344e575",
-                            ConcurrencyStamp = "2988c87c-d330-4006-a861-73788c9383b1",
+                            ConcurrencyStamp = "1267e9ab-45b4-4add-a15f-09410de1946e",
                             Name = "user",
                             NormalizedName = "USER"
                         });
@@ -368,6 +368,9 @@ namespace Webforum.Migrations
                     b.Property<bool>("ReportedPost")
                         .HasColumnType("bit");
 
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("WebforumUserId")
                         .HasColumnType("nvarchar(max)");
 
@@ -486,16 +489,16 @@ namespace Webforum.Migrations
                             AccessFailedCount = 0,
                             AmountOfComments = 0,
                             AmountOfPosts = 0,
-                            ConcurrencyStamp = "b975d079-8f1d-4deb-b1ba-23b431b092aa",
-                            CreationDate = new DateTime(2021, 6, 2, 15, 49, 35, 64, DateTimeKind.Local).AddTicks(5503),
+                            ConcurrencyStamp = "98d586c9-2cb0-4347-8bb6-ce1fe74e594b",
+                            CreationDate = new DateTime(2021, 6, 9, 15, 44, 21, 365, DateTimeKind.Local).AddTicks(9109),
                             Email = "admin@core.api",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@CORE.API",
                             NormalizedUserName = "ADMIN@CORE.API",
-                            PasswordHash = "AQAAAAEAACcQAAAAEHHWDx7RVhAE+zCBir2bOPv3h1Ns0BaTIC6Q43QA4mu5wLL/SxcuiXIlsCUqRKOzgw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEPzWe609WDjuogBwQwC6y8flFJg0Yl5/kjiJGq4WAX9uRCUtL/VL0C7X0jN58bCysA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "e0e142a0-08c6-4eb1-b404-190b0e68fbd2",
+                            SecurityStamp = "4389096d-4910-4498-83a2-13120586ed7f",
                             TwoFactorEnabled = false,
                             UserName = "admin@core.api"
                         });

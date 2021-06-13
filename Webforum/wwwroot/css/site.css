@@ -305,7 +305,22 @@ body {
     font-size: 1.4rem;
 }
 
-::-webkit-scrollbar{
+.Dropdowntitle{
+    text-align: center;
+}
+
+.dropdown{
+    display: flex;
+    justify-content: center;
+}
+
+.post-image {
+    border-radius: 100%;
+    grid-row: span 2;
+    height: 40px;
+}
+
+::-webkit-scrollbar {
     display: none;
 }
 
