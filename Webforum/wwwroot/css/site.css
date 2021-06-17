@@ -132,7 +132,7 @@ body {
         grid-template-columns: 40px 1fr max-content;
         grid-gap: 10px;
         color: #ddd;
-        font-size: 1.3rem;
+        font-size: 1rem;
         border-bottom: 1px solid #002C88;
         padding: 20px 20px 20px 10.5px;
     }
@@ -169,6 +169,7 @@ body {
     white-space: nowrap;
     overflow-x: hidden;
     text-overflow: ellipsis;
+    font-size: 1.3rem;
 }
 .new-message-container {
     display: grid;
@@ -318,6 +319,41 @@ body {
     border-radius: 100%;
     grid-row: span 2;
     height: 40px;
+}
+
+.commentsection {
+    display: block;
+    border-left-style: solid;
+    border-right-style: solid;
+    border-bottom-style: solid;
+    border-top-style: solid;
+    border-color: grey;
+    border-width: 0.5px;
+    margin-top: 0;
+    margin-bottom: 25px;
+}
+
+.expandMoreContent {
+    height: 110px;
+    overflow: hidden;
+    transition: height 0.5s ease-in-out;
+    position: relative;
+}
+
+.expandMoreContent.expand-active{
+    height: auto;
+    transition: height 0.5s ease-in-out;
+}
+
+.expandMoreHolder{
+    padding: 15px 0;
+    text-align: center;
+}
+
+.btn-expand-more{
+    cursor: pointer;
+    
+    display: inline-block;
 }
 
 ::-webkit-scrollbar {

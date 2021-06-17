@@ -41,7 +41,7 @@
             <div class="creationDate">
                 @if (dialog.Messages.Count > 0)
                 {
-                    @dialog.Messages.Where(x => x.DialogId == dialog.Id).OrderByDescending(x => x.CreationDate).Select(x => x.CreationDate).First()
+                    @dialog.Messages.Where(x => x.DialogId == dialog.Id).OrderByDescending(x => x.CreationDate).Select(x => x.CreationDate).First().ToShortDateString()
                 }
                 else
                 {

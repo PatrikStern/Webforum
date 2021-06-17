@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Webforum.Migrations
 {
-    public partial class updates : Migration
+    public partial class update : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -32,6 +32,7 @@ namespace Webforum.Migrations
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     AmountOfPosts = table.Column<int>(type: "int", nullable: false),
                     AmountOfComments = table.Column<int>(type: "int", nullable: false),
+                    About = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -302,7 +303,8 @@ namespace Webforum.Migrations
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     WebforumUserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PostThreadId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    PostThreadId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    AmountOfLikes = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -341,17 +343,17 @@ namespace Webforum.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "root-0c0-aa65-4af8-bd17-00bd9344e575", "fb376350-5daa-4be7-80e0-0daec36896af", "root", "ROOT" });
+                values: new object[] { "root-0c0-aa65-4af8-bd17-00bd9344e575", "865778ca-365f-48b6-89b6-2b4306b2cad8", "root", "ROOT" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "user-2c0-aa65-4af8-bd17-00bd9344e575", "1267e9ab-45b4-4add-a15f-09410de1946e", "user", "USER" });
+                values: new object[] { "user-2c0-aa65-4af8-bd17-00bd9344e575", "35534fde-25fc-49a3-b80e-68fa193d1322", "user", "USER" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "AmountOfComments", "AmountOfPosts", "ConcurrencyStamp", "CreationDate", "Email", "EmailConfirmed", "FirstName", "ImageUrl", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "admin-c0-aa65-4af8-bd17-00bd9344e575", 0, 0, 0, "98d586c9-2cb0-4347-8bb6-ce1fe74e594b", new DateTime(2021, 6, 9, 15, 44, 21, 365, DateTimeKind.Local).AddTicks(9109), "admin@core.api", true, null, null, null, false, null, "ADMIN@CORE.API", "ADMIN@CORE.API", "AQAAAAEAACcQAAAAEPzWe609WDjuogBwQwC6y8flFJg0Yl5/kjiJGq4WAX9uRCUtL/VL0C7X0jN58bCysA==", null, false, "4389096d-4910-4498-83a2-13120586ed7f", false, "admin@core.api" });
+                columns: new[] { "Id", "About", "AccessFailedCount", "AmountOfComments", "AmountOfPosts", "ConcurrencyStamp", "CreationDate", "Email", "EmailConfirmed", "FirstName", "ImageUrl", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[] { "admin-c0-aa65-4af8-bd17-00bd9344e575", null, 0, 0, 0, "d3a631e3-102f-4dc5-a669-6b9be53fa911", new DateTime(2021, 6, 16, 13, 46, 56, 586, DateTimeKind.Local).AddTicks(3471), "admin@core.api", true, null, "DefaultProfileImg.jpg", null, false, null, "ADMIN@CORE.API", "ADMINCORE123", "AQAAAAEAACcQAAAAEGQPytuDfYUhjVP+j0ZBOjix2LuVwyfxyg7syz/0Rbdahwp3ZsPhQfSI/pQL3oNsSg==", null, false, "ce6e9e49-7e74-42f1-9b5c-79d882dc28a3", false, "AdminCore123" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",

@@ -17,6 +17,7 @@ namespace Webforum.Areas.Identity.Data
         public DateTime CreationDate { get; set; }
         public int AmountOfPosts { get; set; }
         public int AmountOfComments { get; set; }
+        public string About { get; set; }
 
         public WebforumUser()
         {

@@ -28,7 +28,7 @@
             @foreach (var topic in subject.Categories)
             {
                 Threads = topic.HeadLines.SelectMany(x => x.Threads).ToList();
-                posts = Threads.SelectMany(x => x.Posts).OrderByDescending(x => x.CreationDate).ToList();
+                posts = Threads.SelectMany(x => x.Posts).Where(x => x.deletedByAdmin == false).OrderByDescending(x => x.CreationDate).ToList();
                 if (posts.Count != 0)
                 {
                     latestPost = posts.First();

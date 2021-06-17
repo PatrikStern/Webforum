@@ -1,25 +1,27 @@
-﻿
+﻿@using Webforum.Areas.Identity.Data.Entites
+@inject Webforum.Gateways.DBGateway _DBGateway
+@code {
+
+}
 <aside class="m-3">
     <div class="card">
         <div class="card-body">
             <h2 class="h4 card-title">Forum statistik</h2>
             <dl>
                 <dt>Antal forum:</dt>
-                <dd>15</dd>
+                <dd>@_DBGateway.SiteStatistics().AmountOfForums</dd>
             </dl>
             <dl>
                 <dt>Antal ämnen:</dt>
-                <dd>1239</dd>
+                <dd>@_DBGateway.SiteStatistics().AmountOfCategories</dd>
             </dl>
             <dl>
                 <dt>Antal medlemmar:</dt>
-                <dd>200</dd>
+                <dd>@_DBGateway.SiteStatistics().AmountOfUsers</dd>
             </dl>
         </div>
 
     </div>
 
 </aside>
-@code {
 
-}

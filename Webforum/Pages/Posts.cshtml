@@ -8,6 +8,7 @@
 @inject DBGateway _DBGateway
 @{
     var user = await UserManager.GetUserAsync(User);
+    int DataTarget = 1;
 
 }
 
@@ -44,63 +45,122 @@
 
 @foreach (var post in Model.Posts.OrderBy(x => x.CreationDate))
 {
+    if (post.deletedByAdmin == false)
+    {
 
-    <table class="table table-striped table-bordered">
-        <thead class="thead-light">
-            <tr>
-                <th class="topic-col" scope="col">Författare</th>
-                <th scope="col">Inlägg</th>
-            </tr>
-        </thead>
-        <tbody>
-        <tbody>
-            <tr>
-                <td class="author-col">
-                    <div>Av: <a>@_DBGateway.FindUser(post.WebforumUserId).Result.UserName</a></div>
-                </td>
-                <td class="post-col d-lg-flex justify-content-lg-between">
-                    <div><span class="font-weight-bold">Ämne:</span> @Model.Thread</div>
-                    <div><span class="font-weight-bold">Publicerat: </span>@post.CreationDate</div>
-                </td>
-            </tr>
-            <tr>
+        <table class="table table-striped table-bordered m-0">
+            <thead class="thead-light">
+                <tr>
+                    <th class="topic-col" scope="col">Författare</th>
+                    <th scope="col">Inlägg</th>
+                </tr>
+            </thead>
+            <tbody>
+            <tbody>
+                <tr>
+                    <td class="author-col">
+                        <div>Av: <a>@_DBGateway.FindUser(post.WebforumUserId).Result.UserName</a></div>
+                    </td>
+                    <td class="post-col d-lg-flex justify-content-lg-between">
+                        <div><span class="font-weight-bold">Ämne:</span> @Model.Thread</div>
+                        <div><span class="font-weight-bold">Publicerat: </span>@post.CreationDate</div>
+                    </td>
+                </tr>
+                <tr>
 
-                <td class="post-col">
-                    <div><img class="post-image" src="~/img/@_DBGateway.FindUser(post.WebforumUserId).Result.ImageUrl" /></div>
-                    <div><span class="font-weight-bold">Joined: </span><br />@_DBGateway.FindUser(post.WebforumUserId).Result.CreationDate</div>
-                    <div><span class="font-weight-bold">Posts:</span><br />@_DBGateway.FindUser(post.WebforumUserId).Result.AmountOfPosts</div>
-                </td>
-                <td>
+                    <td class="post-col">
+                        <div><img class="post-image" src="~/img/@_DBGateway.FindUser(post.WebforumUserId).Result.ImageUrl" /></div>
+                        <div><span class="font-weight-bold">Joined: </span><br />@_DBGateway.FindUser(post.WebforumUserId).Result.CreationDate</div>
+                        <div><span class="font-weight-bold">Posts:</span><br />@_DBGateway.FindUser(post.WebforumUserId).Result.AmountOfPosts</div>
+                    </td>
                     @if (post.ReportedPost == false)
                     {
-                        @post.Post
-                        <form method="post" class="float-right">
-                            <input hidden name="reportedPost" value="@post.Id" />
-                            <button class="btn-danger btn-sm" type="submit">Anmäl inlägg</button>
-                        </form>
+                        <td>
+                            <div>
+                                @post.Post
+
+                                <form method="post" class="float-right m-1 ">
+                                    <input hidden name="reportedPost" value="@post.Id" />
+                                    <button class="btn-danger btn-sm" type="submit">Anmäl</button>
+                                </form>
+                                <form method="post" class="float-right m-1 ">
+                                    <input hidden name="likedPost" value="@post.Id" />
+                                    <span>@post.AmountOfLikes.ToString()</span>
+                                    <button class="btn-primary btn-sm" type="submit"><img src="~/img/outline_favorite_white_24dp.png" /></button>
+                                </form>
+                            </div>
+                            @if (post.ImageUrl != null && post.ImageUrl != "")
+                            {
+
+                                <img src="~/img/@post.ImageUrl" style="height: 120px; width: 210px; border-radius: 3px;" class="m-1" />
+                            }
+
+
+
+
+                        </td>
+
                     }
                     @if (post.ReportedPost == true && post.deletedByAdmin == false)
                     {
+                        <td>
+
+                            <div class="float-right"><p style="color:orangered;">Inlägget granskas efter anmälning...</p></div>
+                        </td>
+                    }
+                </tr>
 
 
-                        <div class="float-right"><p style="color:orangered;">Inlägget granskas efter anmälning...</p></div>
-                    }
-                    @if (post.deletedByAdmin == true)
-                    {
-                        <div class="float-right"><p style="color:darkred;">Inlägget är borttaget sedan det anmälts och försvinner om 30 dagar.</p></div>
-                    }
+        </table>
+        @if (post.ReportedPost == false && SignInManager.IsSignedIn(User))
+        {
+
+<div class="card" style="margin-bottom: 15px;">
+    <table class="table table-borderless m-0">
+        @if (post.Comments.Count > 0)
+        {
+            <tr>
+                <td>
+                    <div class="expandMoreContent text-center" id="@DataTarget">
+                        @foreach (var comment in post.Comments.OrderBy(x => x.CreationDate))
+                        {
+
+                            <p><span>Av: @_DBGateway.FindUser(comment.WebforumUserId).Result.UserName</span><br /><span>@comment.Comment</span>    <span>@comment.CreationDate</span></p>
+                        }
+                    </div>
+                    <div class="expandMoreHolder">
+                        <span expand-more data-hidetext="Visa mindre..." data-showtext="Visa mer..." data-target="@DataTarget" class="btn-expand-more" style="color: blue;">...Visa mer</span>
+                    </div>
                 </td>
             </tr>
+        }
+        <tr>
+            <td class="text-center">
+                <form method="post" id="comment-post">
+                    <input name="Comment" placeholder="Kommentera inlägg" type="text" />
+                    <input name="UserID" hidden value="@user.Id" />
+                    <input name="PostID" hidden type="submit" value="@post.Id" />
+                </form>
+            </td>
+        </tr>
     </table>
+</div>
+
+        }
+
+    }
+     
+  DataTarget = DataTarget + 1;
 }
 
 
 
 @if (SignInManager.IsSignedIn(User))
 {
-    <form method="post" class="mb-3">
+    <form method="post" class="mb-3" enctype="multipart/form-data">
         <div class="form-group">
-            <label for="comment">Nytt inlägg:</label>
+            <label for="comment">Nytt inlägg:</label><br />
+            <input class="m-2" type="file" asp-for="@Model.PostImageUrl" />
             <textarea class="form-control" name="newInput" id="comment" rows="10"></textarea>
             <input hidden name="UserID" value="@user.Id" />
             <button type="submit" class="btn btn-primary m-3">Sänd</button>
@@ -109,6 +169,18 @@
 }
 
 <component type="typeof(HTMLComponents.SiteStatistics)" render-mode="ServerPrerendered" />
+
+<script type="text/javascript">
+
+    $(function () {
+        $(window).keydown(function (e) {
+            if (e.keyCode == 13) {
+                $("#comment-post").submit()
+            }
+        });
+    })
+</script>
+
 
 
 

@@ -23,7 +23,7 @@ namespace ConvoCollector.Controllers
         [HttpPost]
         public async Task<ActionResult> CollectConversation([FromBody] ThreadIDModel ThreadID)
         {
-            var conversation = await _context.Posts.Where(x => x.PostThreadId == ThreadID.ThreadID).ToListAsync();
+            var conversation = await _context.Posts.Include(x => x.Comments).Where(x => x.PostThreadId == ThreadID.ThreadID).ToListAsync();
 
             if (conversation == null) 
             {

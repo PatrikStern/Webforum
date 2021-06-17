@@ -34,7 +34,9 @@ namespace Webforum.Pages
 
         public async Task OnGetAsync()
         {
+            
             Chat = await _DBGateway.CollectChat(UserID);
+           
             if(DialogID != null)
             {
                 ChatMessagesList = await _DBGateway.CollectChatMessages(DialogID);
@@ -44,10 +46,9 @@ namespace Webforum.Pages
         public async Task <ActionResult> OnPostAsync()
         {
 
-            if(DialogID != null)
+            if(DialogID != null && newChatMessage != null)
             {
-                if (newChatMessage != null)
-                {
+                
                     var chatMessage = new Message()
                     {
                         WebforumUserId = UserID,
@@ -55,7 +56,12 @@ namespace Webforum.Pages
                         DialogId = DialogID
                     };
                     await _DBGateway.CreateChatMessage(chatMessage);
-                }
+                
+            }
+
+            else if(DialogID != null && newInput == null)
+            {
+                return RedirectToPage("Chat", new { UserID = UserID, DialogID = DialogID });
             }
 
             else

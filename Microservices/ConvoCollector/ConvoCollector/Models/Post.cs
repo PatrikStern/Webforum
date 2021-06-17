@@ -5,15 +5,15 @@ using System.Collections.Generic;
 
 namespace ConvoCollector.Models
 {
-    public partial class Posts
+    public partial class Post
     {
-        public Posts()
+        public Post()
         {
-            Comments = new HashSet<Comments>();
+            Comments = new HashSet<Comment>();
         }
 
         public string Id { get; set; }
-        public string Post { get; set; }
+        public string Post1 { get; set; }
         public string ImageUrl { get; set; }
         public bool ReportedPost { get; set; }
         public bool DeletedByAdmin { get; set; }
@@ -21,9 +21,8 @@ namespace ConvoCollector.Models
         public string WebforumUserId { get; set; }
         public string UserName { get; set; }
         public string PostThreadId { get; set; }
-        public int AmountOfLikes { get; set; }
 
         public virtual Thread PostThread { get; set; }
-        public virtual ICollection<Comments> Comments { get; set; }
+        public virtual ICollection<Comment> Comments { get; set; }
     }
 }

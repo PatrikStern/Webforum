@@ -26,7 +26,7 @@ namespace ConvoCollector.Models
         public virtual DbSet<AspNetUserToken> AspNetUserTokens { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Chat> Chats { get; set; }
-        public virtual DbSet<Comment> Comments { get; set; }
+        public virtual DbSet<Comments> Comments { get; set; }
         public virtual DbSet<Dialog> Dialogs { get; set; }
         public virtual DbSet<HeadLine> HeadLines { get; set; }
         public virtual DbSet<Message> Messages { get; set; }
@@ -143,15 +143,13 @@ namespace ConvoCollector.Models
                     .HasForeignKey(d => d.SubjectId);
             });
 
-            modelBuilder.Entity<Comment>(entity =>
+            modelBuilder.Entity<Comments>(entity =>
             {
                 entity.HasIndex(e => e.PostsId, "IX_Comments_PostsId");
 
-                entity.Property(e => e.Comment1).HasColumnName("Comment");
+                entity.Property(e => e.Comment).HasColumnName("Comment");
 
-                entity.HasOne(d => d.Posts)
-                    .WithMany(p => p.Comments)
-                    .HasForeignKey(d => d.PostsId);
+                
             });
 
             modelBuilder.Entity<Dialog>(entity =>

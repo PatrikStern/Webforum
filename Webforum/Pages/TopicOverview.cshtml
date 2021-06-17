@@ -28,7 +28,7 @@
     <tbody>
         @foreach (var thread in Model.Threads)
         {
-            posts = thread.Posts.OrderByDescending(x => x.CreationDate).ToList();
+            posts = thread.Posts.Where(x => x.deletedByAdmin == false).OrderByDescending(x => x.CreationDate).ToList();
             comments = posts.SelectMany(x => x.Comments).ToList();
 
             if (posts.Count != 0)
@@ -37,7 +37,7 @@
             }
             <tr>
                 <td>
-                    <h3 class="h6"><span class="badge badge-primary m-2">3 olästa poster</span><a href="/Posts?HeadlineID=@thread.HeadLinesId&ThreadID=@thread.Id&Thread=@thread.Titel">@thread.Titel</a></h3>
+                    <h3 class="h6"><a href="/Posts?HeadlineID=@thread.HeadLinesId&ThreadID=@thread.Id&Thread=@thread.Titel">@thread.Titel</a></h3>
                 </td>
                 <td>
                     <div>Av <a href="#">@_DBGateway.FindUser(thread.WebforumUserId.ToString()).Result.UserName</a></div>

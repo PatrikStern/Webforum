@@ -20,6 +20,7 @@ namespace Webforum.Areas.Identity.Data.Entites
         public string WebforumUserId { get; set; }
         public string UserName { get; set; }
         public string PostThreadId { get; set; }
+        public int AmountOfLikes { get; set; }
         public virtual List<Comments> Comments { get; set; }
 
         public Posts()

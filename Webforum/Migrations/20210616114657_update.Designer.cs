@@ -10,8 +10,8 @@ using Webforum.Data;
 namespace Webforum.Migrations
 {
     [DbContext(typeof(WebforumContext))]
-    [Migration("20210609134422_updates")]
-    partial class updates
+    [Migration("20210616114657_update")]
+    partial class update
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -51,14 +51,14 @@ namespace Webforum.Migrations
                         new
                         {
                             Id = "root-0c0-aa65-4af8-bd17-00bd9344e575",
-                            ConcurrencyStamp = "fb376350-5daa-4be7-80e0-0daec36896af",
+                            ConcurrencyStamp = "865778ca-365f-48b6-89b6-2b4306b2cad8",
                             Name = "root",
                             NormalizedName = "ROOT"
                         },
                         new
                         {
                             Id = "user-2c0-aa65-4af8-bd17-00bd9344e575",
-                            ConcurrencyStamp = "1267e9ab-45b4-4add-a15f-09410de1946e",
+                            ConcurrencyStamp = "35534fde-25fc-49a3-b80e-68fa193d1322",
                             Name = "user",
                             NormalizedName = "USER"
                         });
@@ -353,6 +353,9 @@ namespace Webforum.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<int>("AmountOfLikes")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
 
@@ -404,6 +407,9 @@ namespace Webforum.Migrations
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("About")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
@@ -489,18 +495,19 @@ namespace Webforum.Migrations
                             AccessFailedCount = 0,
                             AmountOfComments = 0,
                             AmountOfPosts = 0,
-                            ConcurrencyStamp = "98d586c9-2cb0-4347-8bb6-ce1fe74e594b",
-                            CreationDate = new DateTime(2021, 6, 9, 15, 44, 21, 365, DateTimeKind.Local).AddTicks(9109),
+                            ConcurrencyStamp = "d3a631e3-102f-4dc5-a669-6b9be53fa911",
+                            CreationDate = new DateTime(2021, 6, 16, 13, 46, 56, 586, DateTimeKind.Local).AddTicks(3471),
                             Email = "admin@core.api",
                             EmailConfirmed = true,
+                            ImageUrl = "DefaultProfileImg.jpg",
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@CORE.API",
-                            NormalizedUserName = "ADMIN@CORE.API",
-                            PasswordHash = "AQAAAAEAACcQAAAAEPzWe609WDjuogBwQwC6y8flFJg0Yl5/kjiJGq4WAX9uRCUtL/VL0C7X0jN58bCysA==",
+                            NormalizedUserName = "ADMINCORE123",
+                            PasswordHash = "AQAAAAEAACcQAAAAEGQPytuDfYUhjVP+j0ZBOjix2LuVwyfxyg7syz/0Rbdahwp3ZsPhQfSI/pQL3oNsSg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "4389096d-4910-4498-83a2-13120586ed7f",
+                            SecurityStamp = "ce6e9e49-7e74-42f1-9b5c-79d882dc28a3",
                             TwoFactorEnabled = false,
-                            UserName = "admin@core.api"
+                            UserName = "AdminCore123"
                         });
                 });
 

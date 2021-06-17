@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Webforum.Areas.Identity.Data.Entites;
@@ -27,6 +29,14 @@ namespace Webforum.Pages
         public string newInput { get; set; }
         [BindProperty]
         public string reportedPost { get; set; }
+        [BindProperty]
+        public IFormFile PostImageUrl { get; set; }
+        [BindProperty]
+        public string Comment { get; set; }
+        [BindProperty]
+        public string PostID { get; set; }
+        [BindProperty]
+        public string likedPost { get; set; }
         public List<PostThread> Threads { get; set; }
         public List<Posts> Posts { get; set; }
 
@@ -47,25 +57,54 @@ namespace Webforum.Pages
 
         public async Task<ActionResult> OnPostAsync()
         {
-            if(reportedPost != null)
+            if(likedPost != null)
+            {
+                await _DBGateway.LikePost(likedPost);
+            }
+            if(Comment != null)
+            {
+                Comment = InternalFunctions.FaultWordChecker(Comment);
+
+                var comment = new Comments()
+                {
+                    WebforumUserId = UserID,
+                    Comment = Comment,
+                    PostsId = PostID
+                };
+
+                await _DBGateway.CreateComment(comment);
+            }
+
+            if (reportedPost != null)
             {
                 await _DBGateway.ReportPost(reportedPost);
             }
-            else if(newInput != null)
-            {
 
-            var post = new Posts()
+            else if (newInput != null)
             {
-                Post = newInput,
-                WebforumUserId = UserID,
-                UserName = _DBGateway.FindUser(UserID).Result.UserName,
-                PostThreadId = ThreadID
-            };
+                newInput = InternalFunctions.FaultWordChecker(newInput);
 
-            await _DBGateway.CreatePost(post);
-            var user = await _DBGateway.FindUser(UserID);
-            user.AmountOfPosts = user.AmountOfPosts + 1;
-            await _DBGateway.UpdateUser(user);
+                if (PostImageUrl != null)
+                {
+                    var file = "./wwwroot/img/" + PostImageUrl.FileName;
+                    using (var fileStream = new FileStream(file, FileMode.Create))
+                    {
+                        await PostImageUrl.CopyToAsync(fileStream);
+                    }
+                }
+                var post = new Posts()
+                {
+                    Post = newInput,
+                    WebforumUserId = UserID,
+                    UserName = _DBGateway.FindUser(UserID).Result.UserName,
+                    ImageUrl = PostImageUrl != null ? PostImageUrl.FileName : "",
+                    PostThreadId = ThreadID
+                };
+
+                await _DBGateway.CreatePost(post);
+                var user = await _DBGateway.FindUser(UserID);
+                user.AmountOfPosts = user.AmountOfPosts + 1;
+                await _DBGateway.UpdateUser(user);
             }
 
             return RedirectToPage("Posts", new { ThreadID = ThreadID, Thread = Thread, HeadLineID = HeadLineID });

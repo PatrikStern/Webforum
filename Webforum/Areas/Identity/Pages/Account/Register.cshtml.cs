@@ -57,12 +57,11 @@ namespace Webforum.Areas.Identity.Pages.Account
             [DataType(DataType.Text)]
             [Display(Name = "Username")]
             public string UserName { get; set; }
-            [Required]
+            
             [DataType(DataType.Text)]
             [Display(Name = "First name")]
             public string FirstName { get; set; }
 
-            [Required]
             [DataType(DataType.Text)]
             [Display(Name = "Last name")]
             public string LastName { get; set; }
@@ -82,6 +81,11 @@ namespace Webforum.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            
+            [DataType(DataType.Text)]
+            [Display(Name = "About")]
+            public string About { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -110,6 +114,7 @@ namespace Webforum.Areas.Identity.Pages.Account
                     LastName = Input.LastName,
                     UserName = Input.UserName,
                     Email = Input.Email,
+                    About = Input.About != null ? Input.About : "",
                     ImageUrl = Input.Image != null ? Input.Image.FileName : "DefaultProfileImg.jpg"
                 };
                 var result = await _userManager.CreateAsync(user, Input.Password);

@@ -67,6 +67,21 @@ namespace Webforum.Gateways
             return message;
         }
 
+        public async Task<Comments> CreateComment(Comments comment)
+        {
+            await _context.Comments.AddAsync(comment);
+            await _context.SaveChangesAsync();
+            return comment;
+        }
+
+        public async Task LikePost(string LikedPostID)
+        {
+            var likedPost = await _context.Posts.Where(x => x.Id == LikedPostID).FirstOrDefaultAsync();
+            likedPost.AmountOfLikes += 1;
+            _context.Posts.Update(likedPost);
+            await _context.SaveChangesAsync();
+        }
+
         public List<Subject> CollectForumOverview()
         {
             var listOfSubjects =  _context.Subjects.Include(x => x.Categories).ThenInclude(x => x.HeadLines).ThenInclude(x => x.Threads).ThenInclude(x => x.Posts).ToList();
@@ -185,6 +200,33 @@ namespace Webforum.Gateways
             await _context.SaveChangesAsync();
             return postToDelete;
         }
-      
+
+        public Models.SiteStatistics SiteStatistics()
+        {
+            var amountOfForums =  _context.Subjects.Count();
+            var amountOfCategories =  _context.Categories.Count();
+            var amountOfUsers =  _context.Users.Count();
+
+            var siteStatistics = new Models.SiteStatistics()
+            {
+                AmountOfForums = amountOfForums,
+                AmountOfCategories = amountOfCategories,
+                AmountOfUsers = amountOfUsers
+            };
+                
+            return siteStatistics;
+        }
+
+        public async Task<int> AmountOfPostsOfUser(string UserID)
+        {
+            var amountOfPosts = await _context.Posts.Where(x => x.WebforumUserId == UserID).CountAsync();
+            return amountOfPosts;
+        }
+
+        public async Task<int> AmountOfCommentsOfUser(string UserID)
+        {
+            var amountOfComments = await _context.Comments.Where(x => x.WebforumUserId == UserID).CountAsync();
+            return amountOfComments;
+        }
     }
 }

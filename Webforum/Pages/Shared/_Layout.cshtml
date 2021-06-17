@@ -44,7 +44,7 @@
                             <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Profile">Profile</a>
                         </li>
                         @if (SignInManager.IsSignedIn(User) && User.IsInRole("root"))
                         {
@@ -55,7 +55,7 @@
                         @if (SignInManager.IsSignedIn(User))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" href="/Chat?UserID=@user.Id">Chatt</a>
+                                <a class="nav-link text-dark" href="/Chat?UserID=@user.Id">Messages</a>
                             </li>
                         }
                     </ul>

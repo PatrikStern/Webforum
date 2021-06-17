@@ -44,14 +44,15 @@ namespace Webforum.Data
             builder.Entity<WebforumUser>().HasData(new WebforumUser
             {
                 Id = adminId,
-                UserName = "admin@core.api",
-                NormalizedUserName = "ADMIN@CORE.API",
+                UserName = "AdminCore123",
+                NormalizedUserName = "ADMINCORE123",
                 Email = "admin@core.api",
                 NormalizedEmail = "ADMIN@CORE.API",
+                ImageUrl = "DefaultProfileImg.jpg",
                 EmailConfirmed = true,
                 PasswordHash = hasher.HashPassword(null, "AdminPass1!"),
                 SecurityStamp = Guid.NewGuid().ToString(),
-            });
+            }); ;
 
             builder.Entity<IdentityUserRole<string>>().HasData(new IdentityUserRole<string>
             {
