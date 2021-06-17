@@ -11,7 +11,7 @@
 
 <h3>Boardoverview</h3>
 
-@foreach (var subject in _DBGateway.CollectForumOverview())
+@foreach (var subject in _DBGateway.CollectForumOverview().OrderByDescending(x => x.CreationDate))
 {
 
     <h2 class="h5">@subject.SubjectName</h2>
@@ -25,7 +25,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var topic in subject.Categories)
+            @foreach (var topic in subject.Categories.OrderByDescending(x => x.CreationDate))
             {
                 Threads = topic.HeadLines.SelectMany(x => x.Threads).ToList();
                 posts = Threads.SelectMany(x => x.Posts).Where(x => x.deletedByAdmin == false).OrderByDescending(x => x.CreationDate).ToList();

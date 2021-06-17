@@ -16,7 +16,7 @@ namespace Webforum.Gateways
     {
         public async Task<List<Posts>> GetPostsAPI(string ThreadID)
         {
-            var URI = "https://localhost:44395/api/FetchConvo";
+            var URI = "https://webforumpostapi.azurewebsites.net/";
             var Posts = new List<Posts>();
 
             var postValues = new Dictionary<string, string>
