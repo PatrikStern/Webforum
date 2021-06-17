@@ -13,6 +13,8 @@ namespace Webforum.Pages
     public class ProfileModel : PageModel
     {
 
+        [BindProperty(SupportsGet = true)]
+        public string UserID { get; set; }
 
         public WebforumUser UserProfile { get; set; }
 
@@ -30,7 +32,14 @@ namespace Webforum.Pages
 
         public async Task OnGetAsync()
         {
-            UserProfile = await _userManager.GetUserAsync(User);
+            if(UserID != null)
+            {
+                UserProfile = await _userManager.FindByIdAsync(UserID);
+            }
+            else
+            {
+                UserProfile = await _userManager.GetUserAsync(User);
+            }
         }
     }
 }

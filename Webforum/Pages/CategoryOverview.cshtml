@@ -79,7 +79,7 @@
                     @if (Posts.Count != 0)
                     {
                         <h4 class="h6"><a href="#">@Threads.Where(x => x.Id == latestPost.PostThreadId).Select(x => x.Titel).FirstOrDefault()</a></h4>
-                        <div>Författare: <a href="#">@_DBGateway.FindUser(Posts.Where(x => x.Id == latestPost.Id).Select(x => x.WebforumUserId).FirstOrDefault()).Result.UserName </a></div>
+                        <div>Författare: <a href="/Profile?UserID=@_DBGateway.FindUser(Posts.Where(x => x.Id == latestPost.Id).Select(x => x.WebforumUserId).FirstOrDefault()).Result.Id">@_DBGateway.FindUser(Posts.Where(x => x.Id == latestPost.Id).Select(x => x.WebforumUserId).FirstOrDefault()).Result.UserName </a></div>
                         <div>@Posts.Where(x => x.Id == latestPost.Id).Select(x => x.CreationDate).FirstOrDefault()</div>
 
                     }

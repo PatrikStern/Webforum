@@ -59,7 +59,7 @@
             <tbody>
                 <tr>
                     <td class="author-col">
-                        <div>Av: <a>@_DBGateway.FindUser(post.WebforumUserId).Result.UserName</a></div>
+                        <div>Av: <a href="/Profile?UserID=@_DBGateway.FindUser(post.WebforumUserId).Result.Id">@_DBGateway.FindUser(post.WebforumUserId).Result.UserName</a></div>
                     </td>
                     <td class="post-col d-lg-flex justify-content-lg-between">
                         <div><span class="font-weight-bold">Ämne:</span> @Model.Thread</div>

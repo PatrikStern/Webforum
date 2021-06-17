@@ -27,8 +27,17 @@
                         @Model.UserProfile.UserName
                     </h5>
                     <p class="proile-rating">Activity:</p>
+                    @if (Model.UserID != null)
+                    {
+                        <p>Posts: <span>@_DBGateway.AmountOfPostsOfUser(Model.UserID).Result</span></p>
+                        <p>Comments: <span>@_DBGateway.AmountOfCommentsOfUser(Model.UserID).Result</span> </p>
+                    }
+            else
+            {
+
                     <p>Posts: <span>@_DBGateway.AmountOfPostsOfUser(user.Id).Result</span></p>
                     <p>Comments: <span>@_DBGateway.AmountOfCommentsOfUser(user.Id).Result</span> </p>
+            }
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item">
                             <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Account</a>

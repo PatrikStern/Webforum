@@ -75,7 +75,7 @@
                         {
 
                             <h4 class="h6"><a href="#">@Threads.Where(x => x.Id == latestPost.PostThreadId).Select(x => x.Titel).FirstOrDefault()</a></h4>
-                            <div>Författare: <a href="#">@_DBGateway.FindUserForComponent(posts.Where(x => x.Id == latestPost.Id).Select(x => x.WebforumUserId).FirstOrDefault()).UserName</a></div>
+                            <div>Författare: <a href="/Profile?UserID=@_DBGateway.FindUserForComponent(posts.Where(x => x.Id == latestPost.Id).Select(x => x.WebforumUserId).FirstOrDefault()).Id">@_DBGateway.FindUserForComponent(posts.Where(x => x.Id == latestPost.Id).Select(x => x.WebforumUserId).FirstOrDefault()).UserName</a></div>
                             <div>@posts.Where(x => x.Id == latestPost.Id).Select(x => x.CreationDate).FirstOrDefault()</div>
 
                         }

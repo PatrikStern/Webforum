@@ -66,7 +66,7 @@
                 <td>
                     @if (posts.Count != 0)
                     {
-                        <div>Författare: <a href="#">@_DBGateway.FindUser(latestPost.WebforumUserId).Result.UserName</a></div>
+                        <div>Författare: <a href="/Profile?UserID=@_DBGateway.FindUser(latestPost.WebforumUserId).Result.Id">@_DBGateway.FindUser(latestPost.WebforumUserId).Result.UserName</a></div>
                         <div>@latestPost.CreationDate.ToString()</div>
                     }
                     else
