@@ -16,7 +16,7 @@ namespace Webforum.Gateways
     {
         public async Task<List<Posts>> GetPostsAPI(string ThreadID)
         {
-            var URI = "https://webforumpostapi.azurewebsites.net/";
+            var URI = ""; //Place your own API URI Endpoint here
             var Posts = new List<Posts>();
 
             var postValues = new Dictionary<string, string>
